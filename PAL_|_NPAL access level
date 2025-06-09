@@ -1,0 +1,28 @@
+void change_access_level_unpriv(void)
+{
+//read
+	__asm volatile("MRS R0,CONTROL\n");
+//modify
+	__asm volatile(
+			"MOV R1,#0x01\n"
+			"ORR R0,R0,R1\n");
+//write
+	__asm volatile("MSR CONTROL,R0\n");
+}
+int main(void)
+{
+	printf("In thread mode : before interrupt\n");
+	change_access_level_unpriv();
+
+	generate_interrupt();
+
+	printf("In thread mode : after interrupt\n");
+
+	for(;;);
+}
+
+/* This function(ISR) executes in HANDLER MODE of the processor */
+void RTC_WKUP_IRQHandler(void)
+{
+	printf("In handler mode : ISR\n");
+}
