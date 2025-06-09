@@ -1,0 +1,16 @@
+int main(void)
+{
+	
+	uint8_t *ptr=(uint8_t*)0x20000200;
+	*ptr=0xff;
+	//normal method
+	//clearing 7th bit position
+	*ptr &= ~( 1<<7 );
+	
+	//bit band method
+	uint8_t* alias_addr = 0x22000000+(32*(0x20000200-0x20000000))+7*4;
+	
+	//clearing 7th bit of address 0x20000200
+	*alias_addr=0;
+	
+}
